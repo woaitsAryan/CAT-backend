@@ -1,28 +1,46 @@
-import mongoose, { type Document, type Schema } from 'mongoose'
+import mongoose, { type Document } from 'mongoose'
 
-export interface UserType extends Document {
-  _id: Schema.Types.ObjectId
-  email: string
-  passwordHash: string
-  name: string
+interface Name {
+  firstName: string
+  lastName: string
 }
 
-const userSchema = new mongoose.Schema<UserType>({
-  _id: mongoose.Schema.Types.ObjectId,
-  email: { type: String, required: true, unique: true },
-  passwordHash: { type: String, required: true },
-  name: { type: String, required: true }
+interface UserInterface extends Document {
+  name: Name
+  email: string
+  password: string
+  employeeID: string
+  role: 'Inspector' | 'Admin'
+  contactNumber?: string
+  dateCreated: Date
+}
+
+const userSchema = new mongoose.Schema({
+  name: {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true }
+  },
+  email: { type: String, required: true, unique: true, lowercase: true },
+  password: { type: String, required: true },
+  employeeID: { type: String, unique: true, required: true },
+  role: {
+    type: String,
+    enum: ['Inspector', 'Admin'],
+    required: true
+  },
+  contactNumber: { type: String },
+  dateCreated: { type: Date, default: Date.now }
 })
 
 userSchema.set('toJSON', {
   transform: function (_doc, ret, _options) {
-    delete ret.passwordHash
+    delete ret.password
     delete ret._id
     delete ret.__v
     return ret
   }
 })
 
-const User = mongoose.model<UserType>('User', userSchema)
+const UserModel = mongoose.model<UserInterface>('User', userSchema)
 
-export default User
+export { UserModel, type UserInterface }

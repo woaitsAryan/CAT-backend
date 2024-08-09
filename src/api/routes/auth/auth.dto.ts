@@ -1,9 +1,18 @@
 import { z } from 'zod'
 
+const nameSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string()
+})
+
 const registerDto = z.object({
+  name: nameSchema,
   email: z.string().email(),
   password: z.string().min(8),
-  name: z.string()
+  employeeID: z.string(),
+  role: z.enum(['Inspector', 'Admin']),
+  contactNumber: z.string().optional(),
+  dateCreated: z.date().default(() => new Date())
 })
 
 const loginDto = z.object({

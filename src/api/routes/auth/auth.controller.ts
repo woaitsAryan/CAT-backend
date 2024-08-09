@@ -4,8 +4,8 @@ import { loginDto, type loginDtoType, registerDto, type registerDtoType } from '
 import { ErrorBadRequest } from '../../../helpers/errors'
 import AuthService from './auth.service'
 
-export default class AuthController {
-  public static Register = catchAsync(
+export const AuthController = {
+  Register: catchAsync(
     async (req: Request, res: Response) => {
       const validatedBody = registerDto.safeParse(req.body)
       if (!validatedBody.success) {
@@ -15,9 +15,9 @@ export default class AuthController {
       const { token, user } = await AuthService.Register(req.body as registerDtoType)
       return res.json({ token, user })
     }
-  )
+  ),
 
-  public static Login = catchAsync(
+  Login: catchAsync(
     async (req: Request, res: Response) => {
       const validatedBody = loginDto.safeParse(req.body)
       if (!validatedBody.success) {
