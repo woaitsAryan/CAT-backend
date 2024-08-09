@@ -7,8 +7,8 @@ import { type UserInterface } from '../../../models/user'
 import { UserModel } from '../../../models/user'
 import envHandler from '../../../config/envHandler'
 
-export default class AuthService {
-  public static async Register (registerDto: registerDtoType): Promise<{ token: string, user: UserInterface }> {
+export const AuthService = {
+  Register: async (registerDto: registerDtoType): Promise<{ token: string, user: UserInterface }> => {
     const existingUser = await UserModel.findOne({ email: registerDto.email })
     if (existingUser != null) {
       throw new ErrorBadRequest('Email already exists')
@@ -30,9 +30,9 @@ export default class AuthService {
     })
 
     return { token, user: newUser }
-  }
+  },
 
-  public static async Login (loginDto: loginDtoType): Promise<{ token: string, user: UserInterface }> {
+  Login: async (loginDto: loginDtoType): Promise<{ token: string, user: UserInterface }> => {
     const user = await UserModel.findOne({ email: loginDto.email })
     if (user === null) {
       throw new ErrorBadRequest('Invalid username or password')

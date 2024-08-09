@@ -13,7 +13,8 @@ const errorHandler = (
 ): Response => {
   const status = err.status ?? 500
   logger.error(err.message)
-  return res.status(status).json({ error: err.message })
+  console.log(err.message)
+  return res.status(status).json({ success: false, message: err.message, data: null })
 }
 
 export default errorHandler

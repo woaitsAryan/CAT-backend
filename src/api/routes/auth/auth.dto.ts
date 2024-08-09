@@ -1,12 +1,7 @@
 import { z } from 'zod'
 
-const nameSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string()
-})
-
 const registerDto = z.object({
-  name: nameSchema,
+  name: z.string(),
   email: z.string().email(),
   password: z.string().min(8),
   employeeID: z.string(),

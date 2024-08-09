@@ -2,7 +2,7 @@ import catchAsync from '../../../helpers/catchAsync'
 import type { Response, Request } from 'express'
 import { loginDto, type loginDtoType, registerDto, type registerDtoType } from './auth.dto'
 import { ErrorBadRequest } from '../../../helpers/errors'
-import AuthService from './auth.service'
+import { AuthService } from './auth.service'
 
 export const AuthController = {
   Register: catchAsync(
@@ -13,7 +13,7 @@ export const AuthController = {
       }
 
       const { token, user } = await AuthService.Register(req.body as registerDtoType)
-      return res.json({ token, user })
+      return res.json({ data: { user, token }, success: true, message: 'User registered successfully' })
     }
   ),
 
@@ -25,7 +25,7 @@ export const AuthController = {
       }
 
       const { token, user } = await AuthService.Login(req.body as loginDtoType)
-      return res.json({ token, user })
+      return res.json({ data: { user, token }, success: true, message: 'User logged in successfully' })
     }
   )
 }
